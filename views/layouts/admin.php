@@ -94,7 +94,6 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     <div class="container-fluid">
         <div class="row">
             <!-- Phần aside menu bên trái -->
-            <?php if (!Yii::$app->user->isGuest){ ?>
             <aside class="col-lg-3 bg-light p-3">
                 <br>
                 <ul class="nav flex-column">
@@ -120,14 +119,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     </li>
                 </ul>
             </aside>
-            <?php } ?>
 
             <!-- Phần nội dung chính -->
             <div class="col-lg-9">
                 <div class="">
-                    <!--                    --><?php //if (!empty($this->params['breadcrumbs'])): ?>
-                    <!--                        --><?php //= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
-                    <!--                    --><?php //endif ?>
+<!--                    --><?php //if (!empty($this->params['breadcrumbs'])): ?>
+<!--                        --><?php //= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
+<!--                    --><?php //endif ?>
                     <?= Alert::widget() ?>
                     <?= $content ?>
                 </div>

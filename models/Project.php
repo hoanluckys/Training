@@ -38,7 +38,7 @@ class Project extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['createDate', 'updateDate'], 'safe'],
             [['name'], 'string', 'max' => 100],
-            [['projectManagerId'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['projectManagerId' => 'id']],
+            [['projectManagerId'], 'exist', 'skipOnError' => true, 'targetClass' => User1::class, 'targetAttribute' => ['projectManagerId' => 'id']],
         ];
     }
 
@@ -64,7 +64,7 @@ class Project extends \yii\db\ActiveRecord
      */
     public function getProjectManager()
     {
-        return $this->hasOne(User::class, ['id' => 'projectManagerId']);
+        return $this->hasOne(User1::class, ['id' => 'projectManagerId']);
     }
 
     /**

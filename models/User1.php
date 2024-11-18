@@ -36,13 +36,13 @@ class User1 extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['username', 'password', 'name', 'email'], 'required'],
-            [['description'], 'string'],
-            [['username', 'role'], 'string', 'max' => 50],
-            [['password'], 'string', 'max' => 255],
-            [['name', 'email'], 'string', 'max' => 100],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
+            [['username', 'password', 'name', 'email'], 'required', 'message' => 'không được để trống.'],
+            [['description'], 'string', 'message' => 'phải là một chuỗi'],
+            [['username', 'role'], 'string', 'max' => 50, 'message' => 'chỉ được phép tối đa 50 kí tự'],
+            [['password'], 'string', 'max' => 255, 'message' => 'chỉ được phép tối đa 255 kí tự'],
+            [['name', 'email'], 'string', 'max' => 100, 'message' => 'chỉ được phép tối đa 100 kí tự'],
+            [['username'], 'unique', 'message' => 'đã tồn tại trên hệ thống'],
+            [['email'], 'unique', 'message' => 'đã tồn tại trên hệ thống'],
         ];
     }
 
