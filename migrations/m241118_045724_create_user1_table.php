@@ -3,17 +3,17 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%user1}}`.
+ * Handles the creation of table `{{%user}}`.
  */
-class mYYYYMMDD_HHMMSS_create_user1_table extends Migration
+class m241118_045724_create_user1_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        // Tạo bảng 'user1'
-        $this->createTable('{{%user1}}', [
+        // Tạo bảng 'user'
+        $this->createTable('{{%user}}', [
             'id' => $this->primaryKey()->notNull(),  // id chính
             'username' => $this->string(50)->notNull(),  // username
             'password' => $this->string(255)->notNull(),  // password
@@ -24,8 +24,8 @@ class mYYYYMMDD_HHMMSS_create_user1_table extends Migration
         ]);
 
         // Thêm chỉ mục cho các cột 'username' và 'email'
-        $this->createIndex('idx_user1_username', '{{%user1}}', 'username');
-        $this->createIndex('idx_user1_email', '{{%user1}}', 'email');
+        $this->createIndex('idx_user_username', '{{%user}}', 'username');
+        $this->createIndex('idx_user_email', '{{%user}}', 'email');
     }
 
     /**
@@ -33,9 +33,9 @@ class mYYYYMMDD_HHMMSS_create_user1_table extends Migration
      */
     public function safeDown()
     {
-        // Xóa bảng 'user1' và các chỉ mục
-        $this->dropIndex('idx_user1_username', '{{%user1}}');
-        $this->dropIndex('idx_user1_email', '{{%user1}}');
-        $this->dropTable('{{%user1}}');
+        // Xóa bảng 'user' và các chỉ mục
+        $this->dropIndex('idx_user_username', '{{%user}}');
+        $this->dropIndex('idx_user_email', '{{%user}}');
+        $this->dropTable('{{%user}}');
     }
 }
