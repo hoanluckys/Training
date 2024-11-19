@@ -65,4 +65,14 @@ class AuthController extends \yii\web\Controller
         return "edit info";
     }
 
+    public function actionChangepassword()
+    {
+        $model = Yii::$app->user->identity;
+        if (Yii::$app->request->post()) {
+            $oldPassword = Yii::$app->request->post('oldPassword');
+            $newPassword = Yii::$app->request->post('newPassword');
+        }
+        return "change password";
+    }
+
 }

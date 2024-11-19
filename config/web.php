@@ -55,6 +55,7 @@ $config = [
                 'POST login' => 'auth/loginpost',
                 'GET info' => 'auth/viewinfo',
                 'PATCH info' => 'auth/editinfo',
+                'PATCH info/changepassword' => 'auth/changepassword',
                 'GET admin/user' => 'admin/viewusers',
                 'POST admin/user' => 'admin/adduser',
                 'GET admin/user/<id>' => 'admin/viewoneuser',

@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
 use app\models\Project;
+    use app\models\User1;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
@@ -45,6 +46,8 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <?php ActiveForm::end(); ?>
+
+
 
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body table-responsive">

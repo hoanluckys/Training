@@ -55,6 +55,49 @@ $form = ActiveForm::begin([
 </div>
 <?php ActiveForm::end(); ?>
 
+
+<?php
+$this->title = 'Quản lý Project';
+$this->params['breadcrumbs'][] = $this->title;
+
+$formModel = new \yii\base\DynamicModel(['newPassword1', 'newPassword2']);
+$model2 = new User1();
+$form2 = ActiveForm::begin([
+    'id' =>  'formPassword',
+    'action' => Url::to(['/info/changepassword']),
+    'method' => 'PATCH',
+]);
+?>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đổi mật khẩu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <?= $form->field($model, 'password')->passwordInput(['id' => 'oldpassword', 'placeholder' => 'Mật khẩu hiện tại...'])->label("Mật khẩu cũ") ?>
+                <?= $form->field($formModel, 'newPassword1')->passwordInput(['id' => 'newPassword1', 'placeholder' => 'Mật khẩu mới...'])->label("Mật khẩu mới") ?>
+                <?= $form->field($formModel, 'newPassword2')->passwordInput(['id' => 'newPassword2', 'placeholder' => 'Xác nhận mật khẩu mới...'])->label("Xác nhận mật khẩu mới") ?>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="showpass">
+                    <label class="form-check-label" for="showpass">
+                        Hiển thị mật khẩu
+                    </label>
+                </div>
+                <?= Html::hiddenInput('_method', 'PATCH', ['id' => '_method']) ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <?=  Html::submitButton('Xác nhận', ['class' => 'btn btn-primary']) ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php ActiveForm::end(); ?>
+
+
+
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body">
         <h4>Thông tin cá nhân</h4>
@@ -72,7 +115,7 @@ $form = ActiveForm::begin([
                         <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit()">Chỉnh sửa</button>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-warning">Đổi mật khẩu</button>
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal2">Đổi mật khẩu</button>
                     </div>
                 </div>
             </div>
@@ -140,4 +183,19 @@ $form = ActiveForm::begin([
         $('#description').val('<?= $info_user-> description?>');
     }
 
+    document.getElementById('showpass').addEventListener('change', function() {
+        var password = document.getElementById('oldpassword');
+        var newPassword1 = document.getElementById('newPassword1');
+        var newPassword2 = document.getElementById('newPassword2');
+        if (this.checked){
+            password.type = "text";
+            newPassword1.type = "text";
+            newPassword2.type = "text";
+        }
+        else{
+            password.type = "password";
+            newPassword1.type = "password";
+            newPassword2.type = "password";
+        }
+    });
 </script>
