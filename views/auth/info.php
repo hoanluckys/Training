@@ -5,11 +5,12 @@ use app\models\User1;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
+use app\widgets\Alert;
 ?>
 
 
 <?php
-$this->title = 'Quản lý Project';
+$this->title = 'Thông tin cá nhân';
 $this->params['breadcrumbs'][] = $this->title;
 
 $info_user = Yii::$app->user->identity;
@@ -17,7 +18,7 @@ $info_user = Yii::$app->user->identity;
 $model = new User1();
 $form = ActiveForm::begin([
     'id' =>  'formUser',
-    'action' => '',
+    'action' => ['auth/edit-info'],
     'method' => 'post',
 ]);
 ?>
@@ -40,7 +41,7 @@ $form = ActiveForm::begin([
                         'admin' => 'Administrator',
                         'PM' => 'Project Management',
                     ],
-                    ['id' => 'role']
+                    ['id' => 'role', 'disabled' => true]
                 ) ?>
 
                 <?= $form->field($model, 'description')->textarea(['id' => 'description', 'placeholder' => 'Mô tả...']) ?>
@@ -57,14 +58,12 @@ $form = ActiveForm::begin([
 
 
 <?php
-$this->title = 'Quản lý Project';
-$this->params['breadcrumbs'][] = $this->title;
 
-$formModel = new \yii\base\DynamicModel(['newPassword1', 'newPassword2']);
-$model2 = new User1();
+$formModel = new \yii\base\DynamicModel(['oldPassword', 'newPassword1', 'newPassword2']);
+
 $form2 = ActiveForm::begin([
     'id' =>  'formPassword',
-    'action' => Url::to(['/info/changepassword']),
+    'action' => ['auth/change-password'],
     'method' => 'PATCH',
 ]);
 ?>
@@ -76,7 +75,7 @@ $form2 = ActiveForm::begin([
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <?= $form->field($model, 'password')->passwordInput(['id' => 'oldpassword', 'placeholder' => 'Mật khẩu hiện tại...'])->label("Mật khẩu cũ") ?>
+                <?= $form->field($formModel, 'oldPassword')->passwordInput(['id' => 'oldpassword', 'placeholder' => 'Mật khẩu hiện tại...'])->label("Mật khẩu cũ") ?>
                 <?= $form->field($formModel, 'newPassword1')->passwordInput(['id' => 'newPassword1', 'placeholder' => 'Mật khẩu mới...'])->label("Mật khẩu mới") ?>
                 <?= $form->field($formModel, 'newPassword2')->passwordInput(['id' => 'newPassword2', 'placeholder' => 'Xác nhận mật khẩu mới...'])->label("Xác nhận mật khẩu mới") ?>
                 <div class="form-check">
@@ -101,6 +100,7 @@ $form2 = ActiveForm::begin([
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body">
         <h4>Thông tin cá nhân</h4>
+        <?= Alert::widget() ?>
     </div>
 </div>
 <div class="row">

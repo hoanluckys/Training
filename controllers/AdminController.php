@@ -10,17 +10,45 @@ use yii\data\Pagination;
 
 use Yii;
 
+use yii\filters\AccessControl;
+
 class AdminController extends \yii\web\Controller
 {
     public $layout = 'admin';
 
-    public function  actionViewoneuser($id)
+//    public function behaviors()
+//    {
+//        return [
+//            'access' => [
+//                'class' => AccessControl::class,
+////                'only' => ['create', 'update', 'delete'],
+//                'rules' => [
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['admin'],
+////                        'actions' => ['view-project']
+//                    ],
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['projectManagement'],
+//                    ],
+//                    [
+//                        'allow' => true,
+//                        'roles' => ['staff'],
+////                        'actions' => ['add-userh'],
+//                    ],
+//                ],
+//            ],
+//        ];
+//    }
+
+    public function  actionViewOneUser($id)
     {
         $model = User1::findOne($id);
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $model->toArray();
     }
-    public function actionViewusers()
+    public function actionViewUsers()
     {
         $query = User1::find();
         $count = $query->count();
@@ -28,10 +56,10 @@ class AdminController extends \yii\web\Controller
         $all_data = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        return $this->render('@app/views/page/user',['alldata' => $all_data, 'pagination' => $pagination]);
+        return $this->render('user',['alldata' => $all_data, 'pagination' => $pagination]);
     }
 
-    public function actionAdduser()
+    public function actionAddUser()
     {
         $model = new User1();
         if($model->load(Yii::$app->request->post()) && $model->validate()){
@@ -52,7 +80,7 @@ class AdminController extends \yii\web\Controller
         }
     }
 
-    public function actionEdituser($id)
+    public function actionEditUser($id)
     {
         $model = User1::findOne($id);
         if($model->load(Yii::$app->request->post()) && $model->validate()){
@@ -68,7 +96,7 @@ class AdminController extends \yii\web\Controller
         return "edit";
     }
 
-    public function actionDeleteuser($id)
+    public function actionDeleteUser($id)
     {
         $model = User1::findOne($id);
         if($model->delete()){
@@ -79,7 +107,7 @@ class AdminController extends \yii\web\Controller
         }
     }
 
-    public function actionViewproject()
+    public function actionViewProject()
     {
         $query = Project::find()->with('projectManager');;
         $count = $query->count();
@@ -87,10 +115,10 @@ class AdminController extends \yii\web\Controller
         $all_data = $query->offset($pagination->offset)
             ->limit($pagination->limit)
             ->all();
-        return $this->render('@app/views/page/project',['alldata' => $all_data, 'pagination' => $pagination]);
+        return $this->render('project',['alldata' => $all_data, 'pagination' => $pagination]);
     }
 
-    public function actionAddproject()
+    public function actionAddProject()
     {
         $model = new Project();
         if($model->load(Yii::$app->request->post()) && $model->validate()){
@@ -107,14 +135,14 @@ class AdminController extends \yii\web\Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    public function actionViewoneproject($id)
+    public function actionViewOneProject($id)
     {
         $model = Project::findOne($id);
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $model->toArray();
     }
 
-    public function actionEditproject($id)
+    public function actionEditProject($id)
     {
         $model = Project::findOne($id);
         if (Yii::$app->request->isPatch){
@@ -132,7 +160,7 @@ class AdminController extends \yii\web\Controller
         return "edit";
     }
 
-    public function actionDeleteproject($id)
+    public function actionDeleteProject($id)
     {
         $model = Project::findOne($id);
         if($model->delete()){
@@ -141,6 +169,11 @@ class AdminController extends \yii\web\Controller
         else {
             Yii::$app->session->setFlash('error', 'Xóa dự án thất bại.');
         }
+    }
+
+    public function actionViewStatistical()
+    {
+        return $this->render('statistical');
     }
 
 }

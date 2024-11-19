@@ -1,6 +1,7 @@
 <?php
 use yii\widgets\ActiveForm;
-use app\models\User1;
+use app\models\Project;
+    use app\models\User1;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
@@ -8,14 +9,14 @@ use yii\helpers\Url;
 
 
 <?php
-$this->title = 'Quản lý người dùng';
+$this->title = 'Quản lý Project';
 $this->params['breadcrumbs'][] = $this->title;
 
 
-$model = new User1();
+$model = new Project();
 $form = ActiveForm::begin([
     'id' =>  'formUser',
-    'action' => '',
+    'action' => ['admin/add-project'],
     'method' => 'post',
 ]);
 ?>
@@ -23,24 +24,17 @@ $form = ActiveForm::begin([
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm người dùng mới</h5>
+                <h5 class="modal-title">Thêm dự án mới</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <?= $form->field($model, 'username')->textInput(['id' => 'username', 'placeholder' => 'Tên người dùng...']) ?>
-                <?= $form->field($model, 'name')->textInput(['id' => 'name', 'placeholder' => 'Họ và tên...']) ?>
-                <?= $form->field($model, 'email')->textInput(['id' => 'email', 'placeholder' => 'Email...']) ?>
-                <?= $form->field($model, 'password')->textInput(['id' => 'password', 'placeholder' => 'Mật khẩu...']) ?>
-
-                <?= $form->field($model, 'role')->dropDownList(
-                    [
-                        'staff' => 'User',
-                        'admin' => 'Administrator',
-                        'PM' => 'Project Management',
-                    ],
-                    ['id' => 'role']
-                ) ?>
-
+                <?= $form->field($model, 'name')->textInput(['id' => 'name', 'placeholder' => 'Tên dự án...']) ?>
+<!--                --><?php //= $form->field($model, 'projectManagerId')->textInput(['id' => 'projectManagerId', 'placeholder' => 'Email...'])->label("Người quản lý") ?>
+                <?= $form->field($model, 'projectManagerId')->dropDownList(
+                    \yii\helpers\ArrayHelper::map(\app\models\User1::find()->all(), 'id', 'name'),
+//                    ['value' => '2'],
+                    ['id' => 'projectManagerId']
+                )->label("Người quản lý") ?>
                 <?= $form->field($model, 'description')->textarea(['id' => 'description', 'placeholder' => 'Mô tả...']) ?>
                 <?= Html::hiddenInput('_method', 'POST', ['id' => '_method']) ?>
             </div>
@@ -53,30 +47,34 @@ $form = ActiveForm::begin([
 </div>
 <?php ActiveForm::end(); ?>
 
+
+
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body table-responsive">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Thêm người dùng mới</button>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Thêm dự án mới</button>
         <br>
         <br>
         <table class="table table-hover">
             <tr>
-                <th>ID</th>
-                <th>Username</th>
+                <th>STT</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Project Manager</th>
                 <th>Description</th>
+                <th>Create Date</th>
+                <th>Update Date</th>
                 <th>Operation</th>
             </tr>
             <?php foreach($alldata as $key => $value){?>
                 <tr>
-                    <td><?= $value->ID ?></td>
-                    <td><?= $value->username?></td>
+                    <td><?= $key+1 ?></td>
                     <td><?= $value->name?></td>
-                    <td><?= $value->email?></td>
+                    <td><?= $value->projectManager ? $value->projectManager->name : 'Không có.' ?></td>
                     <td><?= $value->description?></td>
+                    <td><?= $value->createDate?></td>
+                    <td><?= $value->updateDate?></td>
                     <td>
-                        <button class = "btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit(<?= $value->ID ?>)">Sửa</button>
-                        <button class = "btn btn-danger" onclick="Delete('<?= $value->ID ?>')">Xóa</button>
+                        <button class = "btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit(<?= $value->id ?>)">Sửa</button>
+                        <button class = "btn btn-danger" onclick="Delete('<?= $value->id ?>')">Xóa</button>
                     </td>
                 </tr>
             <?php } ?>
@@ -85,11 +83,11 @@ $form = ActiveForm::begin([
     </div>
 </div>
 <script>
-    function Delete(idUser){
+    function Delete(idProject){
         let result = confirm("Bạn có chắc chắn muốn xóa?");
         if (!result) return 0;
         $.ajax({
-            url: '<?= Url::to(['/admin/user']) ?>/'+idUser,
+            url: '<?= Url::to(['/admin/delete-project']) ?>?id='+idProject,
             type: 'DELETE',
             success: function(response) {
                 // alert('Xóa thành công');
@@ -101,23 +99,19 @@ $form = ActiveForm::begin([
         });
     }
 
-    function Edit(idUser){
-        $('#formUser').attr('action', '<?= Url::to(['/admin/user']) ?>/'+idUser);
+    function Edit(idProject){
+        $('#formUser').attr('action', '<?= Url::to(['/admin/edit-project']) ?>?id='+idProject);
         $('#_method').val("PATCH");
         $.ajax({
-            url: '<?= Url::to(['/admin/user']) ?>/'+idUser,
+            url: '<?= Url::to(['/admin/view-one-project']) ?>?id='+idProject,
             type: 'GET',
-            // data: { id: idUser },
+            // data: { id: idProject },
             success: function(response) {
                 if (response.error) {
                     alert(response.error);
                 } else {
-                    $('#username').val(response.username);
                     $('#name').val(response.name);
-                    $('#email').val(response.email);
-                    $('#password').val(response.password);
-                    $('#password').prop('disabled', true);
-                    $('#role').val(response.role);
+                    $('#projectManagerId').val(response.projectManagerId);
                     $('#description').val(response.description);
                 }
             },
@@ -129,7 +123,7 @@ $form = ActiveForm::begin([
 
     var myModalEl = document.getElementById('exampleModal')
     myModalEl.addEventListener('hidden.bs.modal', function (event) {
-        $('#formUser').attr('action', '<?= Url::to(['/admin/user']) ?>');
+        $('#formUser').attr('action', '<?= Url::to(['/admin/add-project']) ?>');
         $('#_method').val("POST");
     })
 </script>

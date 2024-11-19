@@ -12,7 +12,7 @@
 
     $model = new User1;
     $form = ActiveForm::begin([
-        'action' => '',
+        'action' => ['auth/loginpost'],
         'method' => 'post',
     ]);
 ?>
@@ -46,7 +46,7 @@
 $model2 = new User1();
 $form2 = ActiveForm::begin([
     'id' =>  'formUser',
-    'action' => Url::to(['/admin/user']),
+    'action' => Url::to(['/admin/add-user']),
     'method' => 'post',
 ]);
 ?>

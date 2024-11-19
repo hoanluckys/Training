@@ -76,7 +76,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 //            ['label' => 'About', 'url' => ['/site/about']],
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/login']]
+                ? ['label' => 'Login', 'url' => ['auth/login']]
                 : '<li class="nav-item">'
                 . Html::beginForm(['/site/logout'])
                 . Html::submitButton(
@@ -98,24 +98,21 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <br>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="<?= Url::to(['/admin/user']) ?>">Quản lý User</a>
+                        <a class="nav-link active" href="<?= Url::to(['admin/view-users']) ?>">Quản lý User</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/admin/project']) ?>">Quản lý project</a>
+                        <a class="nav-link" href="<?= Url::to(['/admin/view-project']) ?>">Quản lý project</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/info']) ?>">Thông tin cá nhân</a>
+                        <a class="nav-link" href="<?= Url::to(['auth/info']) ?>">Thông tin cá nhân</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/admin/forget-password']) ?>">Quên mật khẩu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/admin/statistical']) ?>">Thống kê dự án</a>
+                        <a class="nav-link" href="<?= Url::to(['/admin/view-statistical']) ?>">Thống kê dự án</a>
                     </li>
                 </ul>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= Url::to(['/logout']) ?>">Đăng xuất</a>
+                        <a class="nav-link" href="<?= Url::to(['auth/logout-account']) ?>">Đăng xuất</a>
                     </li>
                 </ul>
             </aside>

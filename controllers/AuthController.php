@@ -3,20 +3,21 @@
 namespace app\controllers;
 use Yii;
 use app\models\User1;
+use yii\helpers\VarDumper;
 
 class AuthController extends \yii\web\Controller
 {
-    public function actionLoginget()
+    public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return Yii::$app->response->redirect(['admin/user']);
+            return Yii::$app->response->redirect(['admin/view-users']);
         }
-        return $this->render('@app/views/page/login');
+        return $this->render('login');
     }
 
     public function actionWeb()
     {
-        return Yii::$app->response->redirect(['/login']);
+        return Yii::$app->response->redirect(['auth/login']);
     }
 
     public function actionLoginpost()
@@ -26,7 +27,7 @@ class AuthController extends \yii\web\Controller
             $user = User1::findByUsername($model->username);
             if ($user && $user->validatePassword(md5($model->password))) {
                 Yii::$app->user->login($user);
-                return Yii::$app->response->redirect(['admin/user']);
+                return Yii::$app->response->redirect(['admin/view-users']);
             } else {
                 Yii::$app->session->setFlash('error', 'Thông tin đăng nhập không chính xác. <a href="forgetpassword">Quên mật khẩu</a>');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -36,17 +37,17 @@ class AuthController extends \yii\web\Controller
         return "Fail";
     }
 
-    public function actionLogout()
+    public function actionLogoutAccount()
     {
         Yii::$app->user->logout();
-        return Yii::$app->response->redirect(['auth/loginget']);
+        return Yii::$app->response->redirect(['auth/login']);
     }
 
-    public function actionViewinfo(){
-        return $this->render('@app/views/page/info');
+    public function actionInfo(){
+        return $this->render('info');
     }
 
-    public function actionEditinfo()
+    public function actionEditInfo()
     {
         $id = Yii::$app->user->identity->id;
         $model = User1::findOne($id);
@@ -65,14 +66,33 @@ class AuthController extends \yii\web\Controller
         return "edit info";
     }
 
-    public function actionChangepassword()
+    public function actionChangePassword()
     {
-        $model = Yii::$app->user->identity;
-        if (Yii::$app->request->post()) {
-            $oldPassword = Yii::$app->request->post('oldPassword');
-            $newPassword = Yii::$app->request->post('newPassword');
+        if (Yii::$app->request->isPatch) {
+            $model = Yii::$app->user->identity;
+            if (Yii::$app->request->post()) {
+                $oldPassword = Yii::$app->request->post('DynamicModel')['oldPassword'];
+                $newPassword1 = Yii::$app->request->post('DynamicModel')['newPassword1'];
+                $newPassword2 = Yii::$app->request->post('DynamicModel')['newPassword2'];
+                if ($newPassword1 == $newPassword2) {
+                    if (md5($oldPassword) == $model->password) {
+                        $model->password = md5($newPassword1);
+                        $model->save();
+                        Yii::$app->session->setFlash('success', 'Đổi mật khẩu thành công.');
+                    }
+                    else {
+                        Yii::$app->session->setFlash('error', 'Mật khẩu cũ không chính xác.');
+                    }
+                }
+                else {
+                    Yii::$app->session->setFlash('error', 'Mật khẩu mới không trùng khớp.');
+                }
+            }
         }
-        return "change password";
+        return Yii::$app->response->redirect(['auth/info']);
     }
 
+
 }
+
+
