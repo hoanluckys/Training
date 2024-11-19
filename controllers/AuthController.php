@@ -28,7 +28,7 @@ class AuthController extends \yii\web\Controller
                 Yii::$app->user->login($user);
                 return Yii::$app->response->redirect(['admin/user']);
             } else {
-                Yii::$app->session->setFlash('error', 'Thông tin đăng nhập không chính xác.');
+                Yii::$app->session->setFlash('error', 'Thông tin đăng nhập không chính xác. <a href="forgetpassword">Quên mật khẩu</a>');
                 return $this->redirect(Yii::$app->request->referrer);
             }
         }

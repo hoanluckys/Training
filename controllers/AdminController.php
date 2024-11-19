@@ -35,6 +35,8 @@ class AdminController extends \yii\web\Controller
     {
         $model = new User1();
         if($model->load(Yii::$app->request->post()) && $model->validate()){
+            $password_ = $model->password;
+            $model->password = md5($password_);
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'Thêm người dùng mới thành công.');
                 return $this->redirect(Yii::$app->request->referrer);
