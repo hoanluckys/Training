@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\User1;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -61,7 +62,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        if (Yii::$app->user->isGuest) {
+            return Yii::$app->response->redirect(['site/login']);
+        }
+        else{
+            return Yii::$app->response->redirect(['user/index']);
+        }
     }
 
     /**
@@ -71,16 +77,30 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+//        if (!Yii::$app->user->isGuest) {
+//            return $this->goHome();
+//        }
+//
+//        $model = new User1();
+//        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+//            return $this->goBack();
+//        }
+//
+//        $model->password = '';
+//        return $this->render('login', [
+//            'model' => $model,
+//        ]);
+        $model = new User1();
+        if ($model->load(Yii::$app->request->post())) {
+            $user = User1::findByUsername($model->username);
+            if ($user && $user->validatePassword(md5($model->password))) {
+                Yii::$app->user->login($user);
+                return Yii::$app->response->redirect(['user/index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Thông tin đăng nhập không chính xác. <a href="forget-password">Quên mật khẩu</a>');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
         }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
         return $this->render('login', [
             'model' => $model,
         ]);

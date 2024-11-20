@@ -1,55 +1,85 @@
 <?php
-
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-
-/** @var app\models\LoginForm $model */
-
-use yii\bootstrap5\ActiveForm;
-use yii\bootstrap5\Html;
-
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+    use yii\widgets\ActiveForm;
+    use app\models\User1;
+    use yii\helpers\Html;
+    use yii\helpers\Url;
+    use app\widgets\Alert;
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to login:</p>
+<?php
+    $this->title = 'Đăng nhập';
+    $this->params['breadcrumbs'][] = $this->title;
 
-    <div class="row">
-        <div class="col-lg-5">
+//    $model = new User1;
+    $form = ActiveForm::begin([
+        'action' => ['user/login'],
+        'method' => 'post',
+    ]);
+?>
+<style>
+.has-error .help-block {
+    color: red;
+}
+</style>
+<!-- form ddanwgn nhập -->
+<br>
+<br>
+<br>
+<div class="row d-flex align-items-end justify-content-center">
+   <div class="col-5">
+       <div class="card">
+           <div class="card-body">
+               <?= Alert::widget() ?>
+               <h1><center>Đăng nhập</center></h1>
+               <?= $form->field($model, 'username')->textInput(['placeholder' => 'Nhập tài khoản...'])->label('Tài khoản') ?>
+               <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Nhập mật khẩu...'])->label('Mật khẩu') ?>
+               <center><a href="#" style="text-decoration: none;" data-bs-toggle="modal" data-bs-target="#exampleModal2">Chưa có tài khoản?</a></center>
+               <?=  Html::submitButton('Đăng nhập', ['class' => 'btn btn-primary']) ?>
+           </div>
+       </div>
+   </div>
+</div>
 
-            <?php $form = ActiveForm::begin([
-                'id' => 'login-form',
-                'fieldConfig' => [
-                    'template' => "{label}\n{input}\n{error}",
-                    'labelOptions' => ['class' => 'col-lg-1 col-form-label mr-lg-3'],
-                    'inputOptions' => ['class' => 'col-lg-3 form-control'],
-                    'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
-                ],
-            ]); ?>
+<?php ActiveForm::end(); ?>
 
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-            <?= $form->field($model, 'password')->passwordInput() ?>
-
-            <?= $form->field($model, 'rememberMe')->checkbox([
-                'template' => "<div class=\"custom-control custom-checkbox\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            ]) ?>
-
-            <div class="form-group">
-                <div>
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
+<?php
+$model2 = new User1();
+$form2 = ActiveForm::begin([
+    'id' =>  'formUser',
+    'action' => Url::to(['user/create']),
+    'method' => 'post',
+]);
+?>
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Đăng ký</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            <div class="modal-body">
+                <?= $form->field($model, 'username')->textInput(['id' => 'username', 'placeholder' => 'Tên người dùng...']) ?>
+                <?= $form->field($model, 'name')->textInput(['id' => 'name', 'placeholder' => 'Họ và tên...']) ?>
+                <?= $form->field($model, 'email')->textInput(['id' => 'email', 'placeholder' => 'Email...']) ?>
+                <?= $form->field($model, 'password')->textInput(['id' => 'password', 'placeholder' => 'Mật khẩu...']) ?>
 
-            <?php ActiveForm::end(); ?>
+                <?= $form->field($model, 'role')->dropDownList(
+                    [
+                        'staff' => 'User',
+                        'admin' => 'Administrator',
+                        'projectManagement' => 'Project Management',
+                    ],
+                    ['id' => 'role']
+                ) ?>
 
-            <div style="color:#999;">
-                You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-                To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+                <?= $form->field($model, 'description')->textarea(['id' => 'description', 'placeholder' => 'Mô tả...']) ?>
+                <?= Html::hiddenInput('_method', 'POST', ['id' => '_method']) ?>
             </div>
-
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <?=  Html::submitButton('Xác nhận', ['class' => 'btn btn-primary']) ?>
+            </div>
         </div>
     </div>
 </div>
+<?php ActiveForm::end(); ?>

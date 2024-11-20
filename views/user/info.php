@@ -18,7 +18,7 @@ $info_user = Yii::$app->user->identity;
 $model = new User1();
 $form = ActiveForm::begin([
     'id' =>  'formUser',
-    'action' => ['auth/edit-info'],
+    'action' => ['user/update-profile'],
     'method' => 'post',
 ]);
 ?>
@@ -39,7 +39,7 @@ $form = ActiveForm::begin([
                     [
                         'staff' => 'User',
                         'admin' => 'Administrator',
-                        'PM' => 'Project Management',
+                        'projectManagement' => 'Project Management',
                     ],
                     ['id' => 'role', 'disabled' => true]
                 ) ?>
@@ -63,7 +63,7 @@ $formModel = new \yii\base\DynamicModel(['oldPassword', 'newPassword1', 'newPass
 
 $form2 = ActiveForm::begin([
     'id' =>  'formPassword',
-    'action' => ['auth/change-password'],
+    'action' => ['user/change-password'],
     'method' => 'PATCH',
 ]);
 ?>

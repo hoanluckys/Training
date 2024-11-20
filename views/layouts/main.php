@@ -5,6 +5,7 @@
 
 use app\assets\AppAsset;
 //use app\widgets\Alert;
+use app\widgets\Alert;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
@@ -76,9 +77,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 //            ['label' => 'About', 'url' => ['/site/about']],
 //            ['label' => 'Contact', 'url' => ['/site/contact']],
             Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['auth/login']]
+                ? ['label' => 'Login', 'url' => ['site/login']]
                 : '<li class="nav-item">'
-                . Html::beginForm(['auth/logout-account'])
+                . Html::beginForm(['site/logout'])
                 . Html::submitButton(
                     'Logout (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'nav-link btn btn-link logout']
@@ -99,21 +100,23 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     <br>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="<?= Url::to(['admin/view-users']) ?>">Quản lý User</a>
+                            <a class="nav-link active" href="<?= Url::to(['user/index']) ?>">Quản lý User</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['/admin/view-project']) ?>">Quản lý project</a>
+                            <a class="nav-link" href="<?= Url::to(['project/index']) ?>">Quản lý project</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['auth/info']) ?>">Thông tin cá nhân</a>
+                            <a class="nav-link" href="<?= Url::to(['user/profile']) ?>">Thông tin cá nhân</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['/admin/view-statistical']) ?>">Thống kê dự án</a>
+                            <a class="nav-link" href="<?= Url::to(['user/statistical']) ?>">Thống kê dự án</a>
                         </li>
                     </ul>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?= Url::to(['auth/logout-account']) ?>">Đăng xuất</a>
+                            <?= Html::beginForm(['site/logout'], 'post') ?>
+                            <?= Html::submitButton('Đăng xuất', ['class' => 'nav-link']) ?>
+                            <?= Html::endForm() ?>
                         </li>
                     </ul>
                 </aside>
@@ -125,7 +128,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                     <!--                    --><?php //if (!empty($this->params['breadcrumbs'])): ?>
                     <!--                        --><?php //= Breadcrumbs::widget(['links' => $this->params['breadcrumbs']]) ?>
                     <!--                    --><?php //endif ?>
-<!--                    --><?php //= Alert::widget() ?>
+                    <?= Alert::widget() ?>
                     <?= $content ?>
                 </div>
             </div>

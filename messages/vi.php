@@ -22,4 +22,5 @@ return [
         'required' => 'Email là bắt buộc.',
         'email' => 'Email không đúng định dạng.',
     ],
+    'create' => 'Tạo tài khoản mới thành công.'
 ];
