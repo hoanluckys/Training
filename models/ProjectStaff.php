@@ -33,7 +33,7 @@ class ProjectStaff extends \yii\db\ActiveRecord
             [['projectId', 'userId'], 'required'],
             [['projectId', 'userId'], 'integer'],
             [['projectId'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['projectId' => 'id']],
-            [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['userId' => 'id']],
+            [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => User1::class, 'targetAttribute' => ['userId' => 'id']],
         ];
     }
 
@@ -66,6 +66,6 @@ class ProjectStaff extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(User::class, ['id' => 'userId']);
+        return $this->hasOne(User1::class, ['id' => 'userId']);
     }
 }

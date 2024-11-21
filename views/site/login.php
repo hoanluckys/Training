@@ -12,7 +12,7 @@
 
 //    $model = new User1;
     $form = ActiveForm::begin([
-        'action' => ['user/login'],
+        'action' => ['site/login'],
         'method' => 'post',
     ]);
 ?>

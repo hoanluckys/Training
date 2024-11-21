@@ -24,6 +24,17 @@ class m241118_045800_create_project_table extends Migration
 
         // Thêm chỉ mục cho cột 'projectManagerId'
         $this->createIndex('idx_project_projectManagerId', '{{%project}}', 'projectManagerId');
+
+        // Thêm khóa ngoại ràng buộc với bảng 'user'
+        $this->addForeignKey(
+            'fk_project_projectManagerId',
+            '{{%project}}',
+            'projectManagerId',
+            '{{%user}}',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**
@@ -31,6 +42,9 @@ class m241118_045800_create_project_table extends Migration
      */
     public function safeDown()
     {
+        // Xóa khóa ngoại trước khi xóa bảng
+        $this->dropForeignKey('fk_project_projectManagerId', '{{%project}}');
+
         // Xóa chỉ mục và bảng 'project'
         $this->dropIndex('idx_project_projectManagerId', '{{%project}}');
         $this->dropTable('{{%project}}');

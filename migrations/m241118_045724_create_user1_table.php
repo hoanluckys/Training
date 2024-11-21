@@ -23,6 +23,17 @@ class m241118_045724_create_user1_table extends Migration
             'description' => $this->text()->defaultValue(null),  // description
         ]);
 
+//        $this->addForeignKey(
+//        $this->addForeignKey(
+//            'fk_project_user',
+//            '{{%project}}',
+//            'projectManagerId',
+//            '{{%user}}',
+//            'id',
+//            'CASCADE',
+//            'CASCADE',
+//        );
+
         // Thêm chỉ mục cho các cột 'username' và 'email'
         $this->createIndex('idx_user_username', '{{%user}}', 'username');
         $this->createIndex('idx_user_email', '{{%user}}', 'email');
@@ -33,6 +44,7 @@ class m241118_045724_create_user1_table extends Migration
      */
     public function safeDown()
     {
+//        $this->dropForeignKey('fk_project_user', '{{%project}}');
         // Xóa bảng 'user' và các chỉ mục
         $this->dropIndex('idx_user_username', '{{%user}}');
         $this->dropIndex('idx_user_email', '{{%user}}');

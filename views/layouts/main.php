@@ -106,6 +106,9 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                             <a class="nav-link" href="<?= Url::to(['project/index']) ?>">Quản lý project</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="<?= Url::to(['project-staff/index']) ?>">Quản lý project staff</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['user/profile']) ?>">Thông tin cá nhân</a>
                         </li>
                         <li class="nav-item">
