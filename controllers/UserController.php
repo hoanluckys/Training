@@ -3,9 +3,10 @@
 namespace app\controllers;
 
 use app\models\Project;
+
 use app\models\User1;
 
-use yii\data\Pagination;
+use yii\data\ArrayDataProvider;
 
 use Yii;
 
@@ -58,13 +59,14 @@ class UserController extends Controller
     public function actionIndex()
     {
         $model = new User1();
-        $query = User1::find();
-        $count = $query->count();
-        $pagination = new Pagination(['defaultPageSize' => 2, 'totalCount' => $count]);
-        $all_data = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-        return $this->render('index',['alldata' => $all_data, 'pagination' => $pagination, 'model' => $model]);
+        $all_data = User1::find()->all();
+        $all_data = new ArrayDataProvider([
+            'allModels' => $all_data,
+            'pagination' => [
+                'pageSize' => 15,
+            ],
+        ]);
+        return $this->render('index',['alldata' => $all_data, 'model' => $model]);
     }
 
     /**
@@ -137,7 +139,10 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        if ($id == Yii::$app->user->identity->id) Yii::$app->session->setFlash('success', 'Không thể xóa chính mình.');
+        if ($id == Yii::$app->user->identity->id) {
+            Yii::$app->session->setFlash('error', 'Không thể xóa chính mình.');
+            return 0;
+        }
         $model = User1::findOne($id);
         if($model->delete()){
             $auth = Yii::$app->authManager;

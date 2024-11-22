@@ -99,9 +99,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 <aside class="col-lg-3 bg-light p-3">
                     <br>
                     <ul class="nav flex-column">
+                        <?php if (Yii::$app->user->can('admin')) { ?>
                         <li class="nav-item">
                             <a class="nav-link active" href="<?= Url::to(['user/index']) ?>">Quản lý User</a>
                         </li>
+                        <?php } ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['project/index']) ?>">Quản lý project</a>
                         </li>
@@ -111,9 +113,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['user/profile']) ?>">Thông tin cá nhân</a>
                         </li>
+                        <?php if (Yii::$app->user->can('admin')) { ?>
                         <li class="nav-item">
                             <a class="nav-link" href="<?= Url::to(['user/statistical']) ?>">Thống kê dự án</a>
                         </li>
+                        <?php } ?>
                     </ul>
                     <ul class="nav flex-column">
                         <li class="nav-item">

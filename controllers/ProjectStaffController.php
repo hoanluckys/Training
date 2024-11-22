@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\models\Project;
 use app\models\ProjectStaff;
 use app\models\User1;
-use yii\data\Pagination;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use Yii;
 
@@ -61,13 +61,17 @@ class ProjectStaffController extends \yii\web\Controller
             $all_project = [];
         }
         $count = $query->count();
-        $pagination = new Pagination(['defaultPageSize' => 3, 'totalCount' => $count]);
-        $all_data = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+
+        $all_data = $query->all();
+        $all_data = new ArrayDataProvider([
+            'allModels' => $all_data,
+            'pagination' => [
+                'pageSize' => 15,
+            ],
+        ]);
 
         $staffs = User1::find()->innerJoin('auth_assignment','user.id = auth_assignment.user_id')->where(['auth_assignment.item_name' => 'staff'])->all();
-        return $this->render('index',['alldata' => $all_data, 'pagination' => $pagination, 'model' => $model, 'staffs' => $staffs, 'all_project' => $all_project]);
+        return $this->render('index',['alldata' => $all_data, 'model' => $model, 'staffs' => $staffs, 'all_project' => $all_project]);
     }
 
     public function actionView($id)
@@ -81,7 +85,7 @@ class ProjectStaffController extends \yii\web\Controller
         $model->load(Yii::$app->request->post());
         $check = ProjectStaff::find()->where(['projectId' => $model->projectId, 'userId' => $model->userId])->count();
         if ($check >0 ){
-            Yii::$app->session->setFlash('error', 'Đã tồn tại nhân viên này trong hệ thống');
+            Yii::$app->session->setFlash('error', 'Đã tồn tại nhân viên trong dự án.');
             return $this->redirect(Yii::$app->request->referrer);
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

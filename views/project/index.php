@@ -1,4 +1,6 @@
 <?php
+
+use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use app\models\Project;
 use app\models\User1;
@@ -54,35 +56,42 @@ $form = ActiveForm::begin([
 
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body table-responsive">
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Thêm dự án mới</button>
+        <?php if (!Yii::$app->user->can('staff')) { ?>
+        <a class="btn btn-success" href="create">+ Thêm dự án mới</a>
+        <?php } ?>
         <br>
         <br>
-        <table class="table table-hover">
-            <tr>
-                <th>STT</th>
-                <th>Name</th>
-                <th>Project Manager</th>
-                <th>Description</th>
-                <th>Create Date</th>
-                <th>Update Date</th>
-                <th>Operation</th>
-            </tr>
-            <?php foreach($alldata as $key => $value){?>
-                <tr>
-                    <td><?= $key+1 ?></td>
-                    <td><?= $value->name?></td>
-                    <td><?= $value->projectManager ? $value->projectManager->name : 'Không có.' ?></td>
-                    <td><?= $value->description?></td>
-                    <td><?= $value->createDate?></td>
-                    <td><?= $value->updateDate?></td>
-                    <td>
-                        <button class = "btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit(<?= $value->id ?>)">Sửa</button>
-                        <button class = "btn btn-danger" onclick="Delete('<?= $value->id ?>')">Xóa</button>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-        <?= LinkPager::widget(['pagination' => $pagination]) ?>
+        <?php
+        echo GridView::widget([
+            'dataProvider' => $alldata,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'name',
+                [
+                    'attribute' => 'projectManager',
+                    'value' => function ($model) {
+                        return $model->projectManager ? $model->projectManager->name : 'Không có';
+                    },
+                ],
+                [
+                    'attribute' => 'Quantity Project',
+                    'value' => function ($model) {
+                        return count($model->projectstaff);
+                    },
+                ],
+                'description',
+                'createDate',
+                'updateDate',
+                [
+                    'label' => 'Operation',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return '<a class="btn btn-warning" href="update?id='.$model->id.'">Sửa</a> '.' <button class="btn btn-danger" onclick="Delete('.$model->id.')">Xóa</button>';
+                    },
+                ],
+            ],
+        ]);
+        ?>
     </div>
 </div>
 <script>

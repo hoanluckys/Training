@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //];
 
 $dataUser = [
-    ['name' => 'User A', 'data' => $dataCountProject]
+    ['name' => 'Số lương project', 'data' => $dataCountProject]
 ];
 
 //$dataListUser = ['User A', 'User B', 'User C', 'User D', 'User E', 'User F', 'User G']
@@ -25,28 +25,28 @@ $dataUser = [
 
 <div class="card" style="border: 0px; margin-top: 13px;">
     <div class="card-body">
-<!--        --><?php
-//            echo Highcharts::widget([
-//                'id' => 'project-chart',
-//                'options' => [
-//                    'chart' => [
-//                        'type' => 'column',
-//                    ],
-//                    'title' => [
-//                        'text' => 'Biểu đồ thống kê số lượng project theo user và ngày tháng',
-//                    ],
-//                    'xAxis' => [
-//                        'categories' => ['Ngày 1', 'Ngày 2', 'Ngày 3'], // Danh sách ngày
-//                    ],
-//                    'yAxis' => [
-//                        'title' => [
-//                            'text' => 'Số lượng project',
-//                        ],
-//                    ],
-//                    'series' => $data,
-//                ],
-//            ]);
-//        ?>
+        <?php
+            echo Highcharts::widget([
+                'id' => 'project-chart',
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                    ],
+                    'title' => [
+                        'text' => 'Biểu đồ thống kê số lượng project theo ngày tháng',
+                    ],
+                    'xAxis' => [
+                        'categories' => ['Ngày 1', 'Ngày 2', 'Ngày 3'], // Danh sách ngày
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'Số lượng project',
+                        ],
+                    ],
+                    'series' => $dataUser,
+                ],
+            ]);
+        ?>
     </div>
 </div>
 
@@ -60,7 +60,7 @@ $dataUser = [
                     'type' => 'column',
                 ],
                 'title' => [
-                    'text' => 'Biểu đồ thống kê số lượng project theo user và ngày tháng',
+                    'text' => 'Biểu đồ thống kê số lượng project theo user',
                 ],
                 'xAxis' => [
                     'categories' => $dataListUser

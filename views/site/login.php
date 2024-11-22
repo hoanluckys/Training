@@ -58,21 +58,22 @@ $form2 = ActiveForm::begin([
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <?= $form->field($model, 'username')->textInput(['id' => 'username', 'placeholder' => 'Tên người dùng...']) ?>
-                <?= $form->field($model, 'name')->textInput(['id' => 'name', 'placeholder' => 'Họ và tên...']) ?>
-                <?= $form->field($model, 'email')->textInput(['id' => 'email', 'placeholder' => 'Email...']) ?>
-                <?= $form->field($model, 'password')->textInput(['id' => 'password', 'placeholder' => 'Mật khẩu...']) ?>
+                <?= $form2->field($model, 'username')->textInput(['id' => 'username', 'placeholder' => 'Tên người dùng...']) ?>
+                <?= $form2->field($model, 'name')->textInput(['id' => 'name', 'placeholder' => 'Họ và tên...']) ?>
+                <?= $form2->field($model, 'email')->textInput(['id' => 'email', 'placeholder' => 'Email...']) ?>
+                <?= $form2->field($model, 'password')->passwordInput(['id' => 'password', 'placeholder' => 'Mật khẩu...']) ?>
 
-                <?= $form->field($model, 'role')->dropDownList(
-                    [
-                        'staff' => 'User',
-                        'admin' => 'Administrator',
-                        'projectManagement' => 'Project Management',
-                    ],
+                <?= $form2->field($model, 'role')->dropDownList(
+//                    [
+//                        'staff' => 'User',
+//                        'admin' => 'Administrator',
+//                        'projectManagement' => 'Project Management',
+//                    ],
+                    \yii\helpers\ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
                     ['id' => 'role']
                 ) ?>
 
-                <?= $form->field($model, 'description')->textarea(['id' => 'description', 'placeholder' => 'Mô tả...']) ?>
+                <?= $form2->field($model, 'description')->textarea(['id' => 'description', 'placeholder' => 'Mô tả...']) ?>
                 <?= Html::hiddenInput('_method', 'POST', ['id' => '_method']) ?>
             </div>
             <div class="modal-footer">

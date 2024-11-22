@@ -30,7 +30,7 @@ class ProjectStaff extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['projectId', 'userId'], 'required'],
+//            [['projectId', 'userId'], 'required'],
             [['projectId', 'userId'], 'integer'],
             [['projectId'], 'exist', 'skipOnError' => true, 'targetClass' => Project::class, 'targetAttribute' => ['projectId' => 'id']],
             [['userId'], 'exist', 'skipOnError' => true, 'targetClass' => User1::class, 'targetAttribute' => ['userId' => 'id']],

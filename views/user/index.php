@@ -4,6 +4,8 @@ use app\models\User1;
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
+use yii\grid\GridView;
+
 ?>
 
 
@@ -34,11 +36,7 @@ $form = ActiveForm::begin([
                 <?= $form->field($model, 'password')->textInput(['id' => 'password', 'placeholder' => 'Mật khẩu...']) ?>
 
                 <?= $form->field($model, 'role')->dropDownList(
-                    [
-                        'staff' => 'User',
-                        'admin' => 'Administrator',
-                        'projectManagement' => 'Project Management',
-                    ],
+                    \yii\helpers\ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name'),
                     ['id' => 'role']
                 ) ?>
 
@@ -59,32 +57,41 @@ $form = ActiveForm::begin([
         <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">+ Thêm người dùng mới</button>
         <br>
         <br>
-        <table class="table table-hover">
-            <tr>
-                <th>STT</th>
-                <th>Username</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Description</th>
-                <th>Operation</th>
-            </tr>
-            <?php foreach($alldata as $key => $value){?>
-                <tr>
-                    <td><?= $key+1 ?></td>
-                    <td><?= $value->username?></td>
-                    <td><?= $value->name?></td>
-                    <td><?= $value->email?></td>
-                    <td><?= $value->description?></td>
-                    <td>
-                        <button class = "btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit(<?= $value->ID ?>)">Sửa</button>
-                        <button class = "btn btn-danger" onclick="Delete('<?= $value->ID ?>')">Xóa</button>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-        <?= LinkPager::widget(['pagination' => $pagination]) ?>
+        <?php
+        echo GridView::widget([
+            'dataProvider' => $alldata,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'username',
+                'name',
+                'email',
+                'role',
+                'description',
+//                [
+//                    'attribute' => 'created_at',
+//                    'format' => ['date', 'php:Y-m-d'],
+//                ],
+
+//                [
+//                    'class' => 'yii\grid\ActionColumn',
+//                    'template' => '{view} {update} {delete}',
+//                ],
+                [
+                    'label' => 'Operation',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        if (Yii::$app->user->identity->id == $model->id) {
+                            return "View Only";
+                        }
+                        return '<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="Edit('.$model->id.')">Sửa</button> '.' <button class="btn btn-danger" onclick="Delete('.$model->id.')">Xóa</button>';
+                    },
+                ],
+            ],
+        ]);
+        ?>
     </div>
 </div>
+
 <script>
     function Delete(idUser){
         let result = confirm("Bạn có chắc chắn muốn xóa?");

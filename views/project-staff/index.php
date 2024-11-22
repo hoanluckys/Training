@@ -1,4 +1,6 @@
 <?php
+
+use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 use app\models\Project;
 use app\models\User1;
@@ -65,33 +67,51 @@ ActiveForm::end();
         <?php } ?>
         <br>
         <br>
-        <table class="table table-hover">
-            <tr>
-                <th>STT</th>
-                <th>Name Staff</th>
-                <th>Name Project</th>
-                <th>Description</th>
-                <th>Create Date</th>
-                <th>Update Date</th>
-                <th>Operation</th>
-            </tr>
-            <?php foreach($alldata as $key => $value){?>
-                <tr>
-                    <td><?= $key+1 ?></td>
-                    <td><?= $value->user ? $value->user->name : 'Không có.' ?></td>
-                    <td><?= $value->project ? $value->project->name : 'Không có.' ?></td>
-                    <td><?= $value->project ? $value->project->description : 'Không có.' ?></td>
-                    <td><?= $value->project ? $value->project->createDate : 'Không có.' ?></td>
-                    <td><?= $value->project ? $value->project->updateDate : 'Không có.' ?></td>
-                    <td>
-                        <?php if (!Yii::$app->user->can('staff')){ ?>
-                        <button class = "btn btn-danger" onclick="Delete('<?= $value->id ?>')">Xóa</button>
-                        <?php } else echo 'View Only'; ?>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-        <?= LinkPager::widget(['pagination' => $pagination]) ?>
+        <?php
+        echo GridView::widget([
+            'dataProvider' => $alldata,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'Name Staff',
+                    'value' => function ($model) {
+                        return $model->user ? $model->user->name : 'Không có';
+                    },
+                ],
+                [
+                    'attribute' => 'Name Project',
+                    'value' => function ($model) {
+                        return $model->project ? $model->project->name : 'Không có';
+                    },
+                ],
+                [
+                    'attribute' => 'Description',
+                    'value' => function ($model) {
+                        return $model->project ? $model->project->description : 'Không có';
+                    },
+                ],
+                [
+                    'attribute' => 'Created Date',
+                    'value' => function ($model) {
+                        return $model->project ? $model->project->createDate : 'Không có';
+                    },
+                ],
+                [
+                    'attribute' => 'Updated Date',
+                    'value' => function ($model) {
+                        return $model->project ? $model->project->updateDate : 'Không có';
+                    },
+                ],
+                [
+                    'label' => 'Operation',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        return '<button class="btn btn-danger" onclick="Delete('.$model->id.')">Xóa</button>';
+                    },
+                ],
+            ],
+        ]);
+        ?>
     </div>
 </div>
 <script>
@@ -102,7 +122,6 @@ ActiveForm::end();
             url: '<?= Url::to(['project-staff/delete']) ?>?id='+idProjectStaff,
             type: 'DELETE',
             success: function(response) {
-                // alert('Xóa thành công');
                 location.reload();
             },
             error: function(xhr, status, error) {

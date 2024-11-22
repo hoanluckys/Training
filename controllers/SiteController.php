@@ -95,7 +95,7 @@ class SiteController extends Controller
             $user = User1::findByUsername($model->username);
             if ($user && $user->validatePassword(md5($model->password))) {
                 Yii::$app->user->login($user);
-                return Yii::$app->response->redirect(['user/index']);
+                return Yii::$app->response->redirect(['user/profile']);
             } else {
                 Yii::$app->session->setFlash('error', 'Thông tin đăng nhập không chính xác. <a href="forget-password">Quên mật khẩu</a>');
                 return $this->redirect(Yii::$app->request->referrer);
